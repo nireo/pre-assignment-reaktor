@@ -1,5 +1,4 @@
-const fs = require('fs');
-const data = fs.readFileSync('/var/lib/dpkg/status', 'utf8');
+let objects = [];
 
 const parseData = item => {
   const objectTemplate = {
@@ -15,6 +14,8 @@ const parseData = item => {
   // remove versions
   if (depends !== []) {
     depends = depends.map(d => d.slice(0, d.indexOf('(')).trim());
+
+    // since items don't
     depends = depends.filter(d => !d.includes(' '));
   }
 
@@ -24,11 +25,18 @@ const parseData = item => {
     .split('Description: ')[1]
     .split('Homepage:')[0]
     .split('Original-Maintainer:')[0];
+
+  objects = objects.concat(objectTemplate);
 };
 
-// remove new lines for easier parsing
-const withOutNewLines = data.replace(/(\r\n|\n|\r)/gm, '');
-let arrays = withOutNewLines.split('Package: ');
-for (let i = 1; i < 51; i++) {
-  parseData(arrays[i]);
-}
+fetch('./status-data.txt')
+  .then(r => r.text())
+  .then(data => {
+    // remove new lines for easier parsing
+    const withOutNewLines = data.replace(/(\r\n|\n|\r)/gm, '');
+    let arrays = withOutNewLines.split('Package: ');
+    for (let i = 1; i < arrays.length; i++) {
+      parseData(arrays[i]);
+    }
+    console.log(objects);
+  });
