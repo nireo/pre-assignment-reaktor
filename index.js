@@ -27,32 +27,6 @@ const parseData = item => {
   objects = objects.concat(objectTemplate);
 };
 
-const handleButtonOnClick = item => {
-  let packages = document.getElementById("packages");
-  let singles = document.getElementById("single-item");
-  packages.style.display = "none";
-  singles.style.display = "";
-
-  document.getElementById("go-back-button").onclick = () => {
-    packages.style.display = "";
-    singles.style.display = "none";
-  };
-
-  document.getElementById("title").innerHTML = item.name;
-  document.getElementById("description").innerHTML = item.description;
-
-  item.depends.forEach(depend => {
-    let button = document.createElement("button");
-    button.innerHTML = depend;
-    button.onclick = () => {
-      let package = objects.find(i => i.name === depend);
-      document.getElementById("title").innerHTML = package.name;
-      document.getElementById("description").innerHTML = package.description;
-    };
-    document.getElementById("depends").appendChild(button);
-  });
-};
-
 const checkSelectedItem = () => {
   let packages = document.getElementById("packages");
   packages.style.display = "none";
@@ -73,6 +47,19 @@ const checkSelectedItem = () => {
 
   document.getElementById("title").innerHTML = selectedItem.name;
   document.getElementById("description").innerHTML = selectedItem.description;
+
+  // clear the old dependency field
+  document.getElementById("depends").innerHTML = "";
+  selectedItem.depends.forEach(depend => {
+    let button = document.createElement("button");
+    button.innerHTML = depend;
+    button.onclick = () => {
+      selectedItem = objects.find(i => i.name === depend);
+      checkSelectedItem();
+    };
+
+    document.getElementById("depends").appendChild(button);
+  });
 };
 
 fetch("./status-data.txt")
