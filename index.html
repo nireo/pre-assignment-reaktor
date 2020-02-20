@@ -32,7 +32,7 @@
     <div class="container">
       <div class="card" style="margin-top: 3rem;">
         <h1>dpkg/status parser</h1>
-        <p id="counter">x packages loaded</p>
+        <p id="counter">loading...</p>
         <a
           href="https://github.com/nireo/pre-assignment-reaktor"
           target="_blank"
@@ -41,8 +41,11 @@
           github
         </a>
         <div id="packages"></div>
-        <div id="single-item">
+        <div style="display: none; margin-top: 3rem;" id="single-item">
           <button id="go-back-button">Go back</button>
+          <h2 id="title"></h2>
+          <p id="description"></p>
+          <div id="depends"></div>
         </div>
       </div>
     </div>

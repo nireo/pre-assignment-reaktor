@@ -11,11 +11,8 @@ const parseData = item => {
 
   let depends = item.split("Depends:")[1];
   depends = depends ? depends.split(", ") : [];
-  // remove versions
   if (depends !== []) {
     depends = depends.map(d => d.slice(0, d.indexOf("(")).trim());
-
-    // since items don't
     depends = depends.filter(d => !d.includes(" "));
   }
 
@@ -30,24 +27,39 @@ const parseData = item => {
 };
 
 const handleButtonOnClick = item => {
-  document.getElementById("packages").style.display = "none";
+  let packages = document.getElementById("packages");
+  let singles = document.getElementById("single-item");
+  packages.style.display = "none";
+  singles.style.display = "";
 
   document.getElementById("go-back-button").onclick = () => {
-    document.getElementById("packages").style.display = "";
+    packages.style.display = "";
+    singles.style.display = "none";
   };
+
+  document.getElementById("title").innerHTML = item.name;
+  document.getElementById("description").innerHTML = item.description;
+
+  item.depends.forEach(depend => {
+    let button = document.createElement("button");
+    button.innerHTML = depend;
+    button.onclick = () => {
+      let package = objects.find(p => p.name === depend);
+      handleButtonOnClick(package);
+    };
+    document.getElementById("depends").appendChild(button);
+  });
 };
 
 fetch("./status-data.txt")
   .then(r => r.text())
   .then(data => {
-    // remove new lines for easier parsing
     const withOutNewLines = data.replace(/(\r\n|\n|\r)/gm, "");
     let arrays = withOutNewLines.split("Package: ");
     for (let i = 1; i < arrays.length; i++) {
       parseData(arrays[i]);
     }
 
-    // change the interface
     document.getElementById(
       "counter"
     ).innerHTML = `${objects.length} packages loaded`;
@@ -55,7 +67,7 @@ fetch("./status-data.txt")
       let button = document.createElement("button");
       button.innerHTML = item.name;
       button.onclick = () => {
-        handleButtonOnClick();
+        handleButtonOnClick(item);
       };
       document.getElementById("packages").appendChild(button);
     });
