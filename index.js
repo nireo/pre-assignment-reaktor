@@ -38,5 +38,12 @@ fetch('./status-data.txt')
     for (let i = 1; i < arrays.length; i++) {
       parseData(arrays[i]);
     }
-    console.log(objects);
+    
+    // change the interface
+    document.getElementById("counter").innerHTML = `${objects.length} packages loaded`;
+    objects.forEach(item => {
+      let button = document.createElement("button");
+      button.innerHTML = item.name;
+      document.getElementById("packages").appendChild(button);
+    })
   });
