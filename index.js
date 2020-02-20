@@ -1,4 +1,5 @@
 let objects = [];
+let selectedItem = null;
 
 const parseData = item => {
   const objectTemplate = {
@@ -7,7 +8,7 @@ const parseData = item => {
     description: ""
   };
 
-  objectTemplate.name = item.split("Status")[0];
+  objectTemplate.name = item.split("Status")[0].split("Essential")[0];
 
   let depends = item.split("Depends:")[1];
   depends = depends ? depends.split(", ") : [];
@@ -44,11 +45,34 @@ const handleButtonOnClick = item => {
     let button = document.createElement("button");
     button.innerHTML = depend;
     button.onclick = () => {
-      let package = objects.find(p => p.name === depend);
-      handleButtonOnClick(package);
+      let package = objects.find(i => i.name === depend);
+      document.getElementById("title").innerHTML = package.name;
+      document.getElementById("description").innerHTML = package.description;
     };
     document.getElementById("depends").appendChild(button);
   });
+};
+
+const checkSelectedItem = () => {
+  let packages = document.getElementById("packages");
+  packages.style.display = "none";
+  if (selectedItem === null) {
+    // if no item is selected, display them all
+    packages.style.display = "";
+    return;
+  }
+
+  let single = document.getElementById("single-item");
+
+  document.getElementById("go-back-button").onclick = () => {
+    selectedItem = null;
+    single.style.display = "none";
+    checkSelectedItem();
+  };
+  single.style.display = "";
+
+  document.getElementById("title").innerHTML = selectedItem.name;
+  document.getElementById("description").innerHTML = selectedItem.description;
 };
 
 fetch("./status-data.txt")
@@ -67,7 +91,8 @@ fetch("./status-data.txt")
       let button = document.createElement("button");
       button.innerHTML = item.name;
       button.onclick = () => {
-        handleButtonOnClick(item);
+        selectedItem = item;
+        checkSelectedItem();
       };
       document.getElementById("packages").appendChild(button);
     });
