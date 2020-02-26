@@ -11,3 +11,19 @@ body {
   border: 1px solid #e6e8eb;
   border-radius: 15px;
 }
+
+.button {
+  cursor: pointer;
+  -webkit-appearance: none;
+  user-select: none;
+  color: white;
+  border-radius: 4px;
+  margin: 0.2rem;
+  padding: 0.7rem 2.5rem;
+  border-width: initial;
+  border-color: initial;
+  border-image: initial;
+  background: #007bff;
+  text-decoration: none;
+  border: none;
+}
