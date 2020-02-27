@@ -8,17 +8,22 @@ const parseData = item => {
     description: ''
   };
 
-  objectTemplate.name = item.split('Status')[0].split('Essential')[0];
+  objectTemplate.name = item
+    .split('Status')[0]
+    .split('Essential')[0]
+    .trim();
 
   let depends = item.split('Depends:')[1];
+  depends = depends ? depends.split('Description:')[0] : '';
   depends = depends ? depends.split(', ') : [];
-  if (depends !== []) {
+  if (depends.length > 0 && typeof depends === 'object') {
     depends = depends.map(d => d.slice(0, d.indexOf('(')).trim());
-    depends = depends.filter(d => !d.includes(' '));
+    depends = depends
+      .filter(d => !d.includes(' '))
+      .filter(d => !d.includes('|'));
   }
 
   objectTemplate.depends = depends;
-
   objectTemplate.description = item
     .split('Description: ')[1]
     .split('Homepage:')[0]
@@ -43,7 +48,8 @@ const checkSelectedItem = () => {
     single.style.display = 'none';
     checkSelectedItem();
   };
-  document.getElementById('go-back-button').className += 'button';
+
+  document.getElementById('go-back-button').className = 'button';
   single.style.display = '';
 
   document.getElementById('title').innerHTML = selectedItem.name;

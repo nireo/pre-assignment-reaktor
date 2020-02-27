@@ -32,6 +32,8 @@
     <div class="container">
       <div class="card" style="margin-top: 3rem;">
         <h1>dpkg/status parser</h1>
+        Note that if clicking on a dependency does not work, the dependency
+        doesn't have its own package entry.
         <p id="counter">loading...</p>
         <a
           href="https://github.com/nireo/pre-assignment-reaktor"
@@ -41,11 +43,13 @@
           github
         </a>
         <div id="packages"></div>
-        <div style="display: none; margin-top: 3rem;" id="single-item">
+        <div style="display: none; margin-top: 1rem;" id="single-item">
           <button id="go-back-button">Go back</button>
-          <h2 id="title"></h2>
-          <p id="description"></p>
-          <div id="depends"></div>
+          <div style="margin-top: 3rem;">
+            <h2 id="title"></h2>
+            <p id="description"></p>
+            <div id="depends"></div>
+          </div>
         </div>
       </div>
     </div>
